@@ -1,4 +1,4 @@
-USE_CAMERA_STUB := false
+
 
 # inherit from the proprietary version
 -include vendor/huawei/u8833/BoardConfigVendor.mk
@@ -47,9 +47,12 @@ COMMON_GLOBAL_CFLAGS += -DQCOM_NO_SECURE_PLAYBACK
 # Audio
 TARGET_PROVIDES_LIBAUDIO := true
 
+# Lights
+TARGET_PROVIDES_LIBLIGHTS := true
+
 # Camera
 BOARD_NEEDS_MEMORYHEAPPMEM := true
-
+USE_CAMERA_STUB := false
 BOARD_USES_QCOM_LIBS := true
 
 # GPS
@@ -67,7 +70,6 @@ BOARD_EGL_CFG := device/huawei/u8833/prebuilt/system/lib/egl/egl.cfg
 USE_OPENGL_RENDERER := true
 TARGET_USES_OVERLAY := true
 TARGET_USES_ION := true
-# TARGET_QCOM_DISPLAY_VARIANT := legacy
 COMMON_GLOBAL_CFLAGS += -DREFRESH_RATE=60
 
 # Webkit
@@ -101,21 +103,10 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 # Kernel 
 TARGET_KERNEL_SOURCE := kernel/huawei/msm8x25
 TARGET_KERNEL_CONFIG := cm_msm8x25_defconfig
-# TARGET_PREBUILT_KERNEL := device/huawei/u8833/kernel
+#TARGET_PREBUILT_KERNEL := device/huawei/u8833/kernel
 BOARD_KERNEL_CMDLINE := androidboot.hardware=huawei loglevel=1
 BOARD_KERNEL_BASE := 0x00200000
 BOARD_PAGE_SIZE := 2048
-
-# Partitions
-BOARD_CACHE_DEVICE := /dev/block/mmcblk0p15
-BOARD_CACHE_FILESYSTEM := ext4
-BOARD_CACHE_FILESYSTEM_OPTIONS := rw
-BOARD_SYSTEM_DEVICE := /dev/block/mmcblk0p17
-BOARD_SYSTEM_FILESYSTEM := ext4
-BOARD_SYSTEM_FILESYSTEM_OPTIONS := rw
-BOARD_DATA_DEVICE := /dev/block/mmcblk0p18
-BOARD_DATA_FILESYSTEM := ext4
-BOARD_DATA_FILESYSTEM_OPTIONS := rw
 
 # USB Mounting
 BOARD_USE_USB_MASS_STORAGE_SWITCH := true

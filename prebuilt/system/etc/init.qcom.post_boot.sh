@@ -1,14 +1,41 @@
 #!/system/bin/sh
+# Copyright (c) 2009-2012, Code Aurora Forum. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of Code Aurora nor
+#       the names of its contributors may be used to endorse or promote
+#       products derived from this software without specific prior written
+#       permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NON-INFRINGEMENT ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
 
 target=`getprop ro.board.platform`
-
+# /* < DTS2012101505399 mazhenhua 00146432 20121015 begin */
 case "$target" in
-    "msm7201a_ffa" | "msm7201a_surf" | "msm7627_ffa" | "msm7627_6x" | "msm7627a" | "msm7x27a" | "msm7627_surf" | \
+    "msm7201a_ffa" | "msm7201a_surf" | "msm7627_ffa" | "msm7627_6x" | "msm7627a"  | "msm7627_surf" | \
     "qsd8250_surf" | "qsd8250_ffa" | "msm7630_surf" | "msm7630_1x" | "msm7630_fusion" | "qsd8650a_st1x")
         echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
         echo 80 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
         ;;
 esac
+# /* DTS2012101505399 mazhenhua 00146432 20121015 end > */
 
 case "$target" in
     "msm7201a_ffa" | "msm7201a_surf")
@@ -23,8 +50,9 @@ case "$target" in
         ;;
 esac
 
+# /* < DTS2012101505399 mazhenhua 00146432 20121015 begin */
 case "$target" in
-     "msm7201a_ffa" | "msm7201a_surf" | "msm7627_ffa" | "msm7627_6x" | "msm7627_surf" | "msm7630_1x" | "msm7630_fusion" | "msm7627a" | "msm7x27a" )
+     "msm7201a_ffa" | "msm7201a_surf" | "msm7627_ffa" | "msm7627_6x" | "msm7627_surf" | "msm7630_surf" | "msm7630_1x" | "msm7630_fusion" | "msm7627a" )
         echo 320000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
         ;;
 esac
@@ -185,7 +213,7 @@ case "$target" in
     "msm8960" | "msm8660" | "msm7630_surf")
         echo 10 > /sys/devices/platform/msm_sdcc.3/idle_timeout
         ;;
-    "msm7627a" | "msm7x27a")
+    "msm7627a")
         echo 10 > /sys/devices/platform/msm_sdcc.1/idle_timeout
         ;;
 esac
@@ -195,7 +223,7 @@ case "$target" in
     "msm8660" | "msm8960")
         start mpdecision
     ;;
-    "msm7627a" | "msm7x27a")
+    "msm7627a")
         soc_id=`cat /sys/devices/system/soc/soc0/id`
         ver=`cat /sys/devices/system/soc/soc0/version`
         case "$soc_id" in
@@ -211,7 +239,7 @@ esac
 
 # Enable Power modes and set the CPU Freq Sampling rates
 case "$target" in
-     "msm7627a" | "msm7x27a")
+     "msm7627a")
         start qosmgrd
 	echo 1 > /sys/module/pm2/modes/cpu0/standalone_power_collapse/idle_enabled
 	echo 1 > /sys/module/pm2/modes/cpu1/standalone_power_collapse/idle_enabled
@@ -227,7 +255,7 @@ esac
 
 # Change adj level and min_free_kbytes setting for lowmemory killer to kick in
 case "$target" in
-     "msm7627a" | "msm7x27a")
+     "msm7627a")
 	echo 0,1,2,4,9,12 > /sys/module/lowmemorykiller/parameters/adj
 	echo 5120 > /proc/sys/vm/min_free_kbytes
      ;;
@@ -248,3 +276,15 @@ case "$target" in
         echo 5120 > /proc/sys/vm/min_free_kbytes
      ;;
 esac
+
+# /* < DTS2012101507058 liuting 20121015 begin */
+# /* The next is config tcpmss from property item ro.tcp_mss */
+tcp_mss=`getprop ro.tcp_mss`
+case "$tcp_mss"
+     in ?*)
+        iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss $tcp_mss
+        iptables -A OUTPUT -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss  $tcp_mss
+        iptables -A INPUT -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss  $tcp_mss
+        ;;
+esac
+# /* DTS2012101507058 liuting 20121015 end*/
