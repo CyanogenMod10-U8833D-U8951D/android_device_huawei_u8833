@@ -219,7 +219,6 @@
 -->
     <bool name="config_ui_enableFadingMarquee">false</bool>
 
-
     <!-- Package name providing network location support. -->
     <string name="config_networkLocationProviderPackageName">com.google.android.location.NetworkLocationProvider</string>
 

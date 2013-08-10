@@ -8,18 +8,19 @@ on early-boot
 
 on init
     mkdir /cust
-    mkdir /storage 0775 system system
-    mkdir /storage/sdcard0 0775 system system
-    mkdir /storage/sdcard1 0775 system system
-    mkdir /internal_sd 0775 system system
-    export EXTERNAL_STORAGE /storage/sdcard0
-    export INTERNAL_STORAGE /storage/sdcard1
+    mkdir /storage 0775 system sdcard_r
+    mkdir /storage/sdcard1 0000 system system
+    mkdir /storage/sdcard0 0000 system system
 
-    symlink /storage/sdcard0 /sdcard
-    symlink /storage/sdcard1 /emmc
+    # for backwards compatibility
     symlink /storage/sdcard0 /mnt/sdcard
-    symlink /storage/sdcard1 /mnt/emmc
-    symlink /storage/sdcard1 /internal_sd
+    symlink /storage/sdcard0 /sdcard
+    symlink /storage/sdcard1 /external_sd
+    symlink /storage/sdcard1 /mnt/external_sd
+
+    export EXTERNAL_STORAGE /storage/sdcard0
+    export SECONDARY_STORAGE /storage/sdcard1
+	
     # can start monitoring.
     mkdir /dev/bus 0755 root root
     mkdir /dev/bus/usb 0755 root root
@@ -170,34 +171,8 @@ on boot
     chmod 0660 /sys/kernel/debug/tracing/trace
 
 on emmc-fs
-    wait /dev/block/mmcblk0p15
-    mount ext4 /dev/block/mmcblk0p15 /cache nosuid nodev barrier=1
-
-    wait /dev/block/mmcblk0p16
-    exec /sbin/e2fsck_s -p /dev/block/mmcblk0p16
-    exec /sbin/resize2fs_s /dev/block/mmcblk0p16
-
-    wait /dev/block/mmcblk0p17
-    exec /sbin/e2fsck_s -p /dev/block/mmcblk0p17
-    exec /sbin/resize2fs_s /dev/block/mmcblk0p17
-    mount ext4 /dev/block/mmcblk0p17 /system ro barrier=1
- 
-    wait /dev/block/mmcblk0p18
-    exec /sbin/e2fsck_s -p /dev/block/mmcblk0p18
-    exec /sbin/resize2fs_s /dev/block/mmcblk0p18
-    mount ext4 /dev/block/mmcblk0p18 /data nosuid nodev barrier=1 
-
-    exec /system/bin/iqcopy /system/etc/iq.img.vfat /data/iq.img.vfat
-    chown system system /data/iq.img.vfat
-    mkdir /data/app_iq_archive
-    chown system system /data/app_iq_archive
-    chmod 0640 /data/app_iq_archive
-    mount vfat loop@/data/iq.img.vfat /data/app_iq_archive rw nosuid nodev
-    write /sys/module/block2mtd/parameters/block2mtd /dev/block/mmcblk0p14
-    
-    wait /dev/block/mmcblk0p19
-    mount vfat /dev/block/mmcblk0p19 /storage/sdcard1 uid=1000,gid=1015,umask=0002,utf8
-    mount ext4 /dev/block/mmcblk0p16 /cust ro
+    # mount mmc partitions
+    mount_all /fstab.huawei
 
 on post-fs
     copy /proc/modem_panic /data/dontpanic/modem_panic

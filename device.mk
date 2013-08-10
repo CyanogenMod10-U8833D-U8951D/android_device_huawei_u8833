@@ -36,14 +36,17 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     dexpreopt \
     gps.u8833 \
+    lights.msm7x27a \
     libloc_api-rpc \
     Camera
 
-# Filesystem management tools
+# Other Packages
 PRODUCT_PACKAGES += \
+    dexpreopt \
     make_ext4fs \
     setup_fs \
-    e2fsck
+    Torch \
+    com.android.future.usb.accessory
 
 # Misc
 PRODUCT_PACKAGES += \
@@ -76,12 +79,7 @@ PRODUCT_COPY_FILES += \
     device/huawei/u8833/ramdisk/init.huawei.rc:root/init.huawei.rc \
     device/huawei/u8833/ramdisk/ueventd.huawei.rc:root/ueventd.huawei.rc \
     device/huawei/u8833/ramdisk/init.huawei.usb.rc:root/init.huawei.usb.rc \
-    device/huawei/u8833/ramdisk/init.qcom.ril.path.sh:root/init.qcom.ril.path.sh
-
-PRODUCT_COPY_FILES += \
-    device/huawei/u8833/ramdisk/e2fsck_s:root/sbin/e2fsck_s \
-    device/huawei/u8833/ramdisk/resize2fs_s:root/sbin/resize2fs_s \
-    device/huawei/u8833/ramdisk/resize2fs_wrapper:root/sbin/resize2fs_wrapper \
+    device/huawei/u8833/ramdisk/fstab.huawei:root/fstab.huawei \
     device/huawei/u8833/ramdisk/tp/1191601.img:root/tp/1191601.img
 
 PRODUCT_COPY_FILES += \
@@ -101,6 +99,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/huawei/u8833/prebuilt/system/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
     device/huawei/u8833/prebuilt/system/etc/audio_policy.conf:system/etc/audio_policy.conf \
+    device/huawei/u8833/prebuilt/system/etc/bluetooth/BCM4330.hcd:system/etc/bluetooth/BCM4330.hcd \
 
 PRODUCT_COPY_FILES += \
     device/huawei/u8833/prebuilt/system/etc/dhcpcd/dhcpcd.conf:system/etc/dhcpcd/dhcpcd.conf \

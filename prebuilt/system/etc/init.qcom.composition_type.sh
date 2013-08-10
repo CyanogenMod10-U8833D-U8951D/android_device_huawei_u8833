@@ -78,7 +78,6 @@ esac
 
 # set default composition for MSM8625
 #/* < DTS2012061404542 sujunfeng 20120614 begin */
-#/* < DTS2012092002075 fengqiu 20120920 begin */
 case $soc_id in
      127 | 128 | 129 | 137)
         comp_8x25=`getprop debug.composition.8x25.type`
@@ -90,5 +89,4 @@ case $soc_id in
         setprop ro.qc.sdk.audio.fluencetype fluence
     ;;
 esac
-#/* DTS2012092002075 fengqiu 20120920 end > */
 #/* DTS2012061404542 sujunfeng 20120614 end > */
