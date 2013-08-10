@@ -36,7 +36,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     dexpreopt \
     gps.u8833 \
-    lights.msm7x27a \
+    lights.u8833 \
     libloc_api-rpc \
     Camera
 
