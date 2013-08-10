@@ -1,0 +1,7 @@
+BUGS:
+
+1- Video recording
+2- Video playing
+3- Lights[PARTIALLY FIXED(Need a try)]
+4- Deep sleep
+5- Ril
