@@ -85,7 +85,6 @@ case $soc_id in
         setprop ro.hw_plat 8x25
         setprop lpa.decode false
         setprop audio.decoder_override_check true
-        setprop use.non-omx.mp3.decoder true
         setprop ro.qc.sdk.audio.fluencetype fluence
     ;;
 esac

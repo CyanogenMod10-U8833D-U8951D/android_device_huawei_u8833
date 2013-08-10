@@ -48,10 +48,6 @@ PRODUCT_PACKAGES += \
     Torch \
     com.android.future.usb.accessory
 
-# Misc
-PRODUCT_PACKAGES += \
-    com.android.future.usb.accessory 
-
 # iptables
 PRODUCT_PACKAGES += \
     iptables \
@@ -120,7 +116,6 @@ PRODUCT_COPY_FILES += \
     device/huawei/u8833/prebuilt/system/etc/thermald-8x25-msm1-pmic_therm.conf:system/etc/thermald-8x25-msm1-pmic_therm.conf \
     device/huawei/u8833/prebuilt/system/etc/thermald.conf:system/etc/thermald.conf \
     device/huawei/u8833/prebuilt/system/etc/init.ath3k.bt.sh:system/etc/init.ath3k.bt.sh \
-    device/huawei/u8833/prebuilt/system/etc/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt \
     device/huawei/u8833/prebuilt/system/etc/qosmgr_rules.xml:system/etc/qosmgr_rules.xml
 
 PRODUCT_COPY_FILES += \
