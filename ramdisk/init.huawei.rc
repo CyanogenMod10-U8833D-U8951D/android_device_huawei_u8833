@@ -286,6 +286,12 @@ on post-fs-data
     mkdir /data/fota 0771
     chown system system /data/fota
 
+    #RILD
+    chmod 777 /dev/oncrpc/30000000:f4fc28c3
+    chmod 777 /dev/oncrpc/3000000e:00090000
+    chmod 777 /dev/oncrpc/30000003:86572c7c
+    chmod 777 /dev/oncrpc/30000012:00040000
+
     #Provide the access to hostapd.conf only to root and group
     chmod 0660 /data/hostapd/hostapd.conf
 
