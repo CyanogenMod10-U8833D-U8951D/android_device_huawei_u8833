@@ -47,7 +47,7 @@ persist.sys.purgeable_assets=1
 sys.mem.max_hidden_apps=10
 
 # Qualcomm
-#ro.vendor.extension_library=/system/lib/libqc-opt.so
+# ro.vendor.extension_library=/system/lib/libqc-opt.so
 com.qc.hardware=true
 dev.pm.dyn_samplingrate=1
 dev.pm.dyn_sample_period=700000
@@ -61,7 +61,19 @@ ro.telephony.call_ring.multiple=false
 ro.telephony.call_ring.delay=3000
 ro.telephony.ril_class=HuaweiQualcommRIL
 ro.telephony.ril.v3=qcomdsds
+persist.rild.nitz_plmn=
+persist.rild.nitz_long_ons_0=
+persist.rild.nitz_long_ons_1=
+persist.rild.nitz_long_ons_2=
+persist.rild.nitz_long_ons_3=
+persist.rild.nitz_short_ons_0=
+persist.rild.nitz_short_ons_1=
+persist.rild.nitz_short_ons_2=
+persist.rild.nitz_short_ons_3=
+DEVICE_PROVISIONED=1
+keyguard.no_require_sim=1
 ro.use_data_netmgrd=true
+ro.ril.transmitpower=true
 
 # USB
 persist.sys.usb.config=mtp,adb
