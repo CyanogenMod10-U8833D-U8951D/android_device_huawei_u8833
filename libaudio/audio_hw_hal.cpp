@@ -300,6 +300,7 @@ static int in_set_parameters(struct audio_stream *stream, const char *kvpairs)
     struct qcom_stream_in *in =
         reinterpret_cast<struct qcom_stream_in *>(stream);
     return in->qcom_in->setParameters(String8(kvpairs));
+    AudioParameter parms = AudioParameter(String8(kvpairs));
 }
 
 static char * in_get_parameters(const struct audio_stream *stream,
@@ -486,8 +487,8 @@ static int adev_open_output_stream(struct audio_hw_device *dev,
         return -ENOMEM;
 
     out->qcom_out = qadev->hwif->openOutputStream(devices,
-                                                    flags,
-                                                    (int *)&config->format,
+						    flags,
+						    (int *) &config->format,
                                                     &config->channel_mask,
                                                     &config->sample_rate,
                                                     &status);

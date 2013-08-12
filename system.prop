@@ -47,10 +47,10 @@ persist.sys.purgeable_assets=1
 sys.mem.max_hidden_apps=10
 
 # Qualcomm
+#ro.vendor.extension_library=/system/lib/libqc-opt.so
 com.qc.hardware=true
 dev.pm.dyn_samplingrate=1
 dev.pm.dyn_sample_period=700000
-ro.vendor.extension_library=/system/lib/libqc-opt.so
 ro.hw_plat=8x25
 
 # Telephony

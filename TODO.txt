@@ -1,7 +1,5 @@
 BUGS:
 
 1- Video recording[Works but FC when close camera]
-2- Video playing[Updated media profiles]
-3- Lights[PARTIALLY FIXED(Need a try)]
-4- Deep sleep[Updated include folder]
-5- Ril
+2- Video playing[Updated media profiles[Not working]]
+5- Ril[Partially working(Intermitent signal)]

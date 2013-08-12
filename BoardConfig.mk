@@ -1,47 +1,48 @@
+#
+# Copyright (C) 2011 The Android Open-Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 
-# inherit from the proprietary version
 -include vendor/huawei/u8833/BoardConfigVendor.mk
 
 TARGET_SPECIFIC_HEADER_PATH := device/huawei/u8833/include
 
 # Platform
-TARGET_NO_BOOTLOADER := true
-TARGET_NO_RADIOIMAGE := true
-
 TARGET_BOARD_PLATFORM := msm7x27a
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
 
-TARGET_ARCH := arm
+TARGET_NO_BOOTLOADER := true
+TARGET_NO_RADIOIMAGE := true
+
 TARGET_CPU_ABI  := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
-TARGET_ARCH_VARIANT := armv7-a-neon
-# cortex-a9 is used to take advantage of NEON optimizations
-TARGET_ARCH_VARIANT_CPU := cortex-a9
-TARGET_ARCH_VARIANT_FPU := neon
 TARGET_CPU_SMP := true
-TARGET_CORTEX_CACHE_LINE_32 := true
-TARGET_USE_SPARROW_BIONIC_OPTIMIZATION := true
 
-ARCH_ARM_HAVE_TLS_REGISTER := true
-ARCH_ARM_HAVE_32_BYTE_CACHE_LINES := true
+TARGET_ARCH := arm
+TARGET_ARCH_VARIANT := armv7-a-neon
 
 TARGET_GLOBAL_CFLAGS += -mfpu=neon -mfloat-abi=softfp
 TARGET_GLOBAL_CPPFLAGS += -mfpu=neon -mfloat-abi=softfp
 
+# Optimisations used by Qualcomm
+TARGET_CORTEX_CACHE_LINE_32 := true
+TARGET_USE_SPARROW_BIONIC_OPTIMIZATION := true
+TARGET_AVOID_DRAW_TEXTURE_EXTENSION := true
+TARGET_USES_16BPPSURFACE_FOR_OPAQUE := true
+
 TARGET_BOOTLOADER_BOARD_NAME := u8833
 TARGET_OTA_ASSERT_DEVICE := u8833,hwu8833,u8833
-
-BOARD_WANTS_EMMC_BOOT := true
-
-NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
-BOARD_EGL_NEEDS_LEGACY_FB := true
-
-# Qualcomm hardware
-BOARD_USES_QCOM_HARDWARE := true
-COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE
-
-# Video
-COMMON_GLOBAL_CFLAGS += -DQCOM_NO_SECURE_PLAYBACK
 
 # Audio
 TARGET_PROVIDES_LIBAUDIO := true
@@ -52,7 +53,13 @@ TARGET_PROVIDES_LIBLIGHTS := true
 # Camera
 BOARD_NEEDS_MEMORYHEAPPMEM := true
 USE_CAMERA_STUB := false
-BOARD_USES_QCOM_LIBS := true
+
+# Qualcomm hardware
+BOARD_USES_QCOM_HARDWARE := true
+COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE
+
+# Video
+COMMON_GLOBAL_CFLAGS += -DQCOM_NO_SECURE_PLAYBACK
 
 # GPS
 BOARD_USES_QCOM_LIBRPC := true
@@ -71,7 +78,7 @@ TARGET_USES_OVERLAY := true
 TARGET_USES_ION := true
 COMMON_GLOBAL_CFLAGS += -DREFRESH_RATE=60
 
-# Webkit
+# Web Rendering
 ENABLE_WEBGL := true
 TARGET_FORCE_CPU_UPLOAD := true
 
