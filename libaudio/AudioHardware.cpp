@@ -270,8 +270,8 @@ status_t AudioHardware::initCheck()
     return mInit ? NO_ERROR : NO_INIT;
 }
 
-AudioStreamOut* AudioHardware::openOutputStream(uint32_t devices, int *format, uint32_t *channels,
- 	uint32_t *sampleRate, status_t *status)
+AudioStreamOut* AudioHardware::openOutputStream(uint32_t devices, audio_output_flags_t flags, int *format, uint32_t *channels,
+        uint32_t *sampleRate, status_t *status)
 {
     ALOGD("openOutputStream: devices = %u format = %x channels = %u sampleRate = %u flags %x\n",
          devices, *format, *channels, *sampleRate, flags);
@@ -660,12 +660,12 @@ uint32_t AudioHardware::getMvsMode(int format)
     case AudioSystem::EVRC:
         return   MVS_MODE_IS127;
         break;
-/*    case AudioSystem::EVRCB:
+    case AudioSystem::EVRCB:
         return MVS_MODE_4GV_NB;
         break;
     case AudioSystem::EVRCWB:
         return MVS_MODE_4GV_WB;
-        break; */
+        break;
     default:
         return BAD_INDEX;
     }
@@ -1500,9 +1500,9 @@ size_t AudioHardware::getInputBufferSize(uint32_t sampleRate, int format, int ch
          (format != AudioSystem::AMR_NB)     &&
          (format != AudioSystem::AMR_WB)     &&
          (format != AudioSystem::EVRC)       &&
-/*         (format != AudioSystem::EVRCB)      &&
+         (format != AudioSystem::EVRCB)      &&
          (format != AudioSystem::EVRCWB)     &&
-*/         (format != AudioSystem::QCELP)      &&
+         (format != AudioSystem::QCELP)      &&
          (format != AudioSystem::AAC)){
         ALOGW("getInputBufferSize bad format: 0x%x", format);
         return 0;
@@ -1574,8 +1574,11 @@ status_t AudioHardware::setVoiceVolume(float v)
         ALOGW("setVoiceVolume(%f) over 1.0, assuming 1.0\n", v);
         v = 1.0;
     }
+    // Added 0.1 to current volume, as in voice call Mute cannot be set as minimum volume(0.00)
+    // setting Rx volume level as 2 for minimum and 7 as max level.
+    v = 0.1 + v;
 
-    int vol = lrint(v * 7.0);
+    int vol = lrint(v * 3.0);
     ALOGD("setVoiceVolume(%f)\n", v);
     ALOGI("Setting in-call volume to %d (available range is 2 to 7)\n", vol);
 

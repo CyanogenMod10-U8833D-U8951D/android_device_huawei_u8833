@@ -527,12 +527,12 @@ status_t AudioPolicyManager::setDeviceConnectionState(AudioSystem::audio_devices
             setOutputDevice(mOutputs.keyAt(i), getNewDevice(mOutputs.keyAt(i), true /*fromCache*/));
         }
 
-        if (device == AudioSystem::AUDIO_DEVICE_OUT_WIRED_HEADSET) {
-            device = AudioSystem::AUDIO_DEVICE_IN_WIRED_HEADSET;
-        } else if (device == AudioSystem::AUDIO_DEVICE_OUT_BLUETOOTH_SCO ||
-                   device == AudioSystem::AUDIO_DEVICE_OUT_BLUETOOTH_SCO_HEADSET ||
-                   device == AudioSystem::AUDIO_DEVICE_OUT_BLUETOOTH_SCO_CARKIT) {
-            device = AudioSystem::AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET;
+        if (device == AudioSystem::DEVICE_OUT_WIRED_HEADSET) {
+            device = AudioSystem::DEVICE_IN_WIRED_HEADSET;
+        } else if (device == AudioSystem::DEVICE_OUT_BLUETOOTH_SCO ||
+                   device == AudioSystem::DEVICE_OUT_BLUETOOTH_SCO_HEADSET ||
+                   device == AudioSystem::DEVICE_OUT_BLUETOOTH_SCO_CARKIT) {
+            device = AudioSystem::DEVICE_IN_BLUETOOTH_SCO_HEADSET;
         } else {
             return NO_ERROR;
         }
@@ -607,14 +607,15 @@ void AudioPolicyManager::setForceUse(AudioSystem::force_use usage, AudioSystem::
             config != AudioSystem::FORCE_WIRED_ACCESSORY &&
             config != AudioSystem::FORCE_ANALOG_DOCK &&
             config != AudioSystem::FORCE_DIGITAL_DOCK && config != AudioSystem::FORCE_NONE &&
-            config != AudioSystem::FORCE_NO_BT_A2DP) {
+            config != AudioSystem::FORCE_NO_BT_A2DP &&
+            config != AudioSystem::FORCE_SPEAKER) {
             ALOGW("setForceUse() invalid config %d for FOR_MEDIA", config);
             return;
         }
         mForceUse[usage] = config;
-	{
-		audio_devices_t device = getDeviceForStrategy(STRATEGY_MEDIA);
-		setOutputDevice(mPrimaryOutput, device);
+        {
+            audio_devices_t device = getDeviceForStrategy(STRATEGY_MEDIA);
+            setOutputDevice(mPrimaryOutput, device);
         }
         break;
     case AudioSystem::FOR_RECORD:
@@ -678,29 +679,29 @@ audio_devices_t AudioPolicyManager::getDeviceForInputSource(int inputSource)
     case AUDIO_SOURCE_MIC:
     case AUDIO_SOURCE_VOICE_RECOGNITION:
         if (mForceUse[AudioSystem::FOR_RECORD] == AudioSystem::FORCE_BT_SCO &&
-            mAvailableInputDevices & AudioSystem::AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET) {
-            device = AudioSystem::AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET;
-        } else if (mAvailableInputDevices & AudioSystem::AUDIO_DEVICE_IN_WIRED_HEADSET) {
-            device = AudioSystem::AUDIO_DEVICE_IN_WIRED_HEADSET;
-        } else if (mAvailableInputDevices & AudioSystem::AUDIO_DEVICE_IN_BUILTIN_MIC) {
-            device = AudioSystem::AUDIO_DEVICE_IN_BUILTIN_MIC;
+            mAvailableInputDevices & AudioSystem::DEVICE_IN_BLUETOOTH_SCO_HEADSET) {
+            device = AudioSystem::DEVICE_IN_BLUETOOTH_SCO_HEADSET;
+        } else if (mAvailableInputDevices & AudioSystem::DEVICE_IN_WIRED_HEADSET) {
+            device = AudioSystem::DEVICE_IN_WIRED_HEADSET;
+        } else if (mAvailableInputDevices & AudioSystem::DEVICE_IN_BUILTIN_MIC) {
+            device = AudioSystem::DEVICE_IN_BUILTIN_MIC;
         }
         break;
     case AUDIO_SOURCE_VOICE_COMMUNICATION:
         device = AudioSystem::DEVICE_IN_COMMUNICATION;
         break;
     case AUDIO_SOURCE_CAMCORDER:
-        if (mAvailableInputDevices & AudioSystem::AUDIO_DEVICE_IN_BACK_MIC) {
-            device = AudioSystem::AUDIO_DEVICE_IN_BACK_MIC;
-        } else if (mAvailableInputDevices & AudioSystem::AUDIO_DEVICE_IN_BUILTIN_MIC) {
-            device = AudioSystem::AUDIO_DEVICE_IN_BUILTIN_MIC;
+        if (mAvailableInputDevices & AudioSystem::DEVICE_IN_BACK_MIC) {
+            device = AudioSystem::DEVICE_IN_BACK_MIC;
+        } else if (mAvailableInputDevices & AudioSystem::DEVICE_IN_BUILTIN_MIC) {
+            device = AudioSystem::DEVICE_IN_BUILTIN_MIC;
         }
         break;
     case AUDIO_SOURCE_VOICE_UPLINK:
     case AUDIO_SOURCE_VOICE_DOWNLINK:
     case AUDIO_SOURCE_VOICE_CALL:
-        if (mAvailableInputDevices & AudioSystem::AUDIO_DEVICE_IN_VOICE_CALL) {
-            device = AudioSystem::AUDIO_DEVICE_IN_VOICE_CALL;
+        if (mAvailableInputDevices & AudioSystem::DEVICE_IN_VOICE_CALL) {
+            device = AudioSystem::DEVICE_IN_VOICE_CALL;
         }
         break;
 #ifdef QCOM_FM_ENABLED
