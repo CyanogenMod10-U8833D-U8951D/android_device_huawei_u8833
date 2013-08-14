@@ -300,6 +300,7 @@ static int in_set_parameters(struct audio_stream *stream, const char *kvpairs)
     struct qcom_stream_in *in =
         reinterpret_cast<struct qcom_stream_in *>(stream);
     return in->qcom_in->setParameters(String8(kvpairs));
+    AudioParameter parms = AudioParameter(String8(kvpairs));
 }
 
 static char * in_get_parameters(const struct audio_stream *stream,
