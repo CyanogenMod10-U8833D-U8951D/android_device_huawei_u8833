@@ -43,7 +43,7 @@ ARCH_ARM_HAVE_TLS_REGISTER := true
 
 
 # Kernel
-TARGET_KERNEL_SOURCE := kernel/huawei/u8833
+TARGET_KERNEL_SOURCE := kernel/huawei/msm8x25
 TARGET_KERNEL_CONFIG := cm_msm8x25_defconfig
 TARGET_BOOTLOADER_BOARD_NAME := u8833
 BOARD_KERNEL_CMDLINE := androidboot.hardware=huawei
