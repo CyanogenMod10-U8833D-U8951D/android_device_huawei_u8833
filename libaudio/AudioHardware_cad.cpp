@@ -252,7 +252,7 @@ status_t AudioHardware::initCheck()
     return mInit ? NO_ERROR : NO_INIT;
 }
 
-AudioStreamOut* AudioHardware::openOutputStream(uint32_t devices, int *format, uint32_t *channels,
+AudioStreamOut* AudioHardware::openOutputStream(uint32_t devices, audio_output_flags_t flags, int *format, uint32_t *channels,
         uint32_t *sampleRate, status_t *status)
 {
 	audio_output_flags_t flags = static_cast<audio_output_flags_t> (*status);
