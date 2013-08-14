@@ -13,14 +13,19 @@ PRODUCT_AAPT_PREF_CONFIG := hdpi
 
 # Video
 PRODUCT_PACKAGES += \
+    libOmxVdec \
+    libOmxVenc \
+    libOmxAacEnc \
+    libOmxAmrEnc \
     libI420colorconvert \
-    libstagefrighthw \
+    libstagefrighthw
 
 # Graphics
 PRODUCT_PACKAGES += \
     copybit.msm7x27a \
     gralloc.msm7x27a \
     hwcomposer.msm7x27a \
+    libgenlock \
     libtilerenderer
 
 # Audio
