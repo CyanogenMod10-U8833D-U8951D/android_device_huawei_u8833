@@ -255,8 +255,6 @@ status_t AudioHardware::initCheck()
 AudioStreamOut* AudioHardware::openOutputStream(uint32_t devices, audio_output_flags_t flags, int *format, uint32_t *channels,
         uint32_t *sampleRate, status_t *status)
 {
-	audio_output_flags_t flags = static_cast<audio_output_flags_t> (*status);
-
     ALOGD("openOutputStream: devices = %u format = %x channels = %u sampleRate = %u flags %x\n",
          devices, *format, *channels, *sampleRate, flags);
     { // scope for the lock
