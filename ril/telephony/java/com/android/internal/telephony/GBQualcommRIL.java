@@ -61,7 +61,7 @@ public class GBQualcommRIL extends RIL implements CommandsInterface {
         int num_current_3gpp2_indexes = p.readInt();
         for (int i = 0; i < num_current_3gpp2_indexes; i++) {
             if (i == 0)
-                status.status.getCdmaSubscriptionAppIndex() = p.readInt();
+                status.getCdmaSubscriptionAppIndex() = p.readInt();
             else
                 p.readInt();
         }
