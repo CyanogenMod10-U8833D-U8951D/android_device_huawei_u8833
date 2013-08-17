@@ -191,8 +191,8 @@ private final int RIL_INT_RADIO_ON = 10;*/
 		status.setCdmaSubscriptionAppIndex = mCdmaSubscriptionAppIndex;
 		if (RILJ_LOGD) riljLog( "status.setCdmaSubscriptionAppIndex " + mCdmaSubscriptionAppIndex);
         int mImsSubscriptionAppIndex      = p.readInt();
-		status.mImsSubscriptionAppIndex = mImsSubscriptionAppIndex;
-		if (RILJ_LOGD) riljLog( "status.mImsSubscriptionAppIndex " + mImsSubscriptionAppIndex);
+		status.setImsSubscriptionAppIndex = mImsSubscriptionAppIndex;
+		if (RILJ_LOGD) riljLog( "status.setImsSubscriptionAppIndex " + mImsSubscriptionAppIndex);
 
         int numApplications = p.readInt();
 		if (RILJ_LOGD) riljLog( "numApplications " + numApplications);
