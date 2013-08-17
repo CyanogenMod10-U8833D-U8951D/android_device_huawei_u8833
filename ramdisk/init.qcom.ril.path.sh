@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+# Copyright (c) 2012 Code Aurora Forum. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -27,35 +27,35 @@
 #
 
 #
-# start ril-daemon only for targets on which radio is present
+# set rild-libpath using modem build_id
 #
-baseband=`getprop ro.baseband`
-multirild=`getprop ro.multi.rild`
-dsds=`getprop persist.dsds.enabled`
-netmgr=`getprop ro.use_data_netmgrd`
-
-case "$baseband" in
-    "apq")
-    setprop ro.radio.noril yes
-    stop ril-daemon
-esac
-
-case "$baseband" in
-    "msm" | "csfb" | "svlte2a" | "mdm" | "sglte" | "unknown")
-    start qmuxd
-    case "$baseband" in
-        "svlte2a" | "csfb" | "sglte")
-        start qmiproxy
-    esac
-    case "$multirild" in
-        "true")
-         case "$dsds" in
-             "true")
-             start ril-daemon1
-         esac
-    esac
-    case "$netmgr" in
-        "true")
-        start netmgrd
-    esac
-esac
+echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+PATH=/sbin:/system/sbin:/system/bin:/system/xbin
+export PATH
+buildid=`cat /sys/devices/system/soc/soc0/build_id`
+offset_1=0
+offset_2=5
+offset_3=4
+length=1
+is_strider=8
+is_qmi_enabled=1
+is_unicorn=7
+is_unicorn_strider='S'
+dsds=`getprop persist.multisim.config`
+modemid_1=${buildid:$offset_1:$length}
+modemid_2=${buildid:$offset_2:$length}
+modemid_3=${buildid:$offset_3:$length}
+if ([ "$modemid_1" = "$is_strider" ] && [ "$modemid_2" -gt "$is_qmi_enabled" ]) ||
+       ([ "$modemid_1" = "$is_unicorn" ] && [ "$modemid_3" = "$is_unicorn_strider" ]); then
+    setprop rild.libpath "/system/lib/libril-qc-qmi-1.so"
+    if [ "$dsds" = "dsds" ]; then
+        setprop ro.multi.rild true
+        stop ril-daemon
+        start ril-daemon
+        start ril-daemon1
+    else
+        stop ril-daemon
+        start ril-daemon
+    fi
+fi
