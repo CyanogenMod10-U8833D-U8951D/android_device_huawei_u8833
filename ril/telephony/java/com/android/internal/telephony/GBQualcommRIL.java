@@ -35,6 +35,8 @@ import com.android.internal.telephony.DataConnection.FailCause;
 import java.util.ArrayList;
 
 public class GBQualcommRIL extends RIL implements CommandsInterface {
+    boolean RILJ_LOGV = true;
+    boolean RILJ_LOGD = true;
 
     public GBQualcommRIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
@@ -52,14 +54,14 @@ public class GBQualcommRIL extends RIL implements CommandsInterface {
         int num_current_3gpp_indexes = p.readInt();
         for (int i = 0; i < num_current_3gpp_indexes; i++) {
             if (i == 0)
-                status.mGsmUmtsSubscriptionAppIndex = p.readInt();
+                status.getGsmUmtsSubscriptionAppIndex() = p.readInt();
             else
                 p.readInt();
         }
         int num_current_3gpp2_indexes = p.readInt();
         for (int i = 0; i < num_current_3gpp2_indexes; i++) {
             if (i == 0)
-                status.mCdmaSubscriptionAppIndex = p.readInt();
+                status.status.getCdmaSubscriptionAppIndex() = p.readInt();
             else
                 p.readInt();
         }
@@ -70,10 +72,10 @@ public class GBQualcommRIL extends RIL implements CommandsInterface {
         if (numApplications > IccCardStatus.CARD_MAX_APPS) {
             numApplications = IccCardStatus.CARD_MAX_APPS;
         }
-        status.mApplications = new IccCardApplicationStatus[numApplications];
+        status.setNumApplications(numApplications);
 
         for (int i = 0 ; i < numApplications ; i++) {
-            ca = new IccCardApplicationStatus();
+            ca = new IccCardApplication();
             ca.app_type       = ca.AppTypeFromRILInt(p.readInt());
             ca.app_state      = ca.AppStateFromRILInt(p.readInt());
             ca.perso_substate = ca.PersoSubstateFromRILInt(p.readInt());
@@ -82,7 +84,7 @@ public class GBQualcommRIL extends RIL implements CommandsInterface {
             ca.pin1_replaced  = p.readInt();
             ca.pin1           = ca.PinStateFromRILInt(p.readInt());
             ca.pin2           = ca.PinStateFromRILInt(p.readInt());
-            status.mApplications[i] = ca;
+            status.addApplication(ca);
         }
 
         return status;
