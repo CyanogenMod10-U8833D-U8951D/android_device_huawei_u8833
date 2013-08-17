@@ -316,7 +316,12 @@ on property:bluetooth.isEnabled=true
 
 on property:bluetooth.isEnabled=false
     start amp_unload
-  
+
+service qcom-c_main-sh /system/bin/sh /init.qcom.class_main.sh
+    class main
+    user root
+    oneshot
+
 on property:vold.decrypt=trigger_restart_framework
     start qcom-c_main-sh
   
