@@ -184,14 +184,14 @@ private final int RIL_INT_RADIO_ON = 10;*/
         int setUniversalPinState      = p.readInt();
 		status.setUniversalPinState(setUniversalPinState);
 		if (RILJ_LOGD) riljLog( "status.setUniversalPinState " + setUniversalPinState);
-        int mGsmUmtsSubscriptionAppIndex      = p.readInt();
-		status.setGsmUmtsSubscriptionAppIndex = mGsmUmtsSubscriptionAppIndex;
+        int setGsmUmtsSubscriptionAppIndex      = p.readInt();
+		status.setGsmUmtsSubscriptionAppIndex = setGsmUmtsSubscriptionAppIndex;
 		if (RILJ_LOGD) riljLog( "status.setGsmUmtsSubscriptionAppIndex " + mGsmUmtsSubscriptionAppIndex);
-        int mCdmaSubscriptionAppIndex      = p.readInt();
-		status.setCdmaSubscriptionAppIndex = mCdmaSubscriptionAppIndex;
+        int setCdmaSubscriptionAppIndex      = p.readInt();
+		status.setCdmaSubscriptionAppIndex = setCdmaSubscriptionAppIndex;
 		if (RILJ_LOGD) riljLog( "status.setCdmaSubscriptionAppIndex " + mCdmaSubscriptionAppIndex);
-        int mImsSubscriptionAppIndex      = p.readInt();
-		status.setImsSubscriptionAppIndex = mImsSubscriptionAppIndex;
+        int setImsSubscriptionAppIndex      = p.readInt();
+		status.setImsSubscriptionAppIndex = setImsSubscriptionAppIndex;
 		if (RILJ_LOGD) riljLog( "status.setImsSubscriptionAppIndex " + mImsSubscriptionAppIndex);
 
         int numApplications = p.readInt();
