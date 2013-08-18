@@ -173,26 +173,16 @@ private final int RIL_INT_RADIO_ON = 10;*/
     }
 
     @Override
-	protected Object
+    protected Object
     responseIccCardStatus(Parcel p) {
-        IccCardApplicationStatus ca;
+        IccCardApplication ca;
 
         IccCardStatus status = new IccCardStatus();
-        int setCardState      = p.readInt();
-		status.setCardState(setCardState);
-		if (RILJ_LOGD) riljLog( "status.setCardState " + setCardState);
-        int setUniversalPinState      = p.readInt();
-		status.setUniversalPinState(setUniversalPinState);
-		if (RILJ_LOGD) riljLog( "status.setUniversalPinState " + setUniversalPinState);
-        int setGsmUmtsSubscriptionAppIndex      = p.readInt();
-		status.setGsmUmtsSubscriptionAppIndex = setGsmUmtsSubscriptionAppIndex;
-		if (RILJ_LOGD) riljLog( "status.setGsmUmtsSubscriptionAppIndex " + mGsmUmtsSubscriptionAppIndex);
-        int setCdmaSubscriptionAppIndex      = p.readInt();
-		status.setCdmaSubscriptionAppIndex = setCdmaSubscriptionAppIndex;
-		if (RILJ_LOGD) riljLog( "status.setCdmaSubscriptionAppIndex " + mCdmaSubscriptionAppIndex);
-        int setImsSubscriptionAppIndex      = p.readInt();
-		status.setImsSubscriptionAppIndex = setImsSubscriptionAppIndex;
-		if (RILJ_LOGD) riljLog( "status.setImsSubscriptionAppIndex " + mImsSubscriptionAppIndex);
+        status.setCardState(p.readInt());
+        status.setUniversalPinState(p.readInt());
+        status.setGsmUmtsSubscriptionAppIndex(p.readInt());
+        status.setCdmaSubscriptionAppIndex(p.readInt());
+        status.setImsSubscriptionAppIndex(p.readInt());
 
         int numApplications = p.readInt();
 		if (RILJ_LOGD) riljLog( "numApplications " + numApplications);
@@ -202,31 +192,17 @@ private final int RIL_INT_RADIO_ON = 10;*/
         }
         status.setNumApplications(numApplications);
 
-        for (int i = 0; i < numApplications; i++) {
+        for (int i = 0 ; i < numApplications ; i++) {
             ca = new IccCardApplication();
             ca.app_type = ca.AppTypeFromRILInt(p.readInt());
-			if (RILJ_LOGD) riljLog( "ca.app_type " + ca.app_type);
-            int appstate      = p.readInt();
-			ca.app_state = ca.AppStateFromRILInt(appstate);
-			if (RILJ_LOGD) riljLog( "ca.app_state " + ca.app_state);
-			if (appstate == -1) {
-                if (RILJ_LOGD) riljLog(
-                        "Illegal app, Mark it READY! RIL_APPSTATE_ILLEGAL "
-                        + appstate + " modified to " + ca.app_state);
-            }
+            ca.app_state = ca.AppStateFromRILInt(p.readInt());
             ca.perso_substate = ca.PersoSubstateFromRILInt(p.readInt());
-			if (RILJ_LOGD) riljLog( "ca.perso_substate " + ca.perso_substate);
             ca.aid = p.readString();
-			if (RILJ_LOGD) riljLog( "ca.aid " + ca.aid);
             ca.app_label = p.readString();
-			if (RILJ_LOGD) riljLog( "ca.app_label " + ca.app_label);
-			ca.pin1_replaced = p.readInt();
-			if (RILJ_LOGD) riljLog( "ca.pin1_replaced " + ca.pin1_replaced);
+            ca.pin1_replaced = p.readInt();
             ca.pin1 = ca.PinStateFromRILInt(p.readInt());
-			if (RILJ_LOGD) riljLog( "ca.pin1 " + ca.pin1);
             ca.pin2 = ca.PinStateFromRILInt(p.readInt());
-			if (RILJ_LOGD) riljLog( "ca.pin2 " + ca.pin2);
-			status.mApplications[i] = ca;
+            status.addApplication(ca);
         }
         int appIndex = -1;
         if (mPhoneType == RILConstants.CDMA_PHONE) {
@@ -238,7 +214,7 @@ private final int RIL_INT_RADIO_ON = 10;*/
         }
 
         if (numApplications > 0) {
-            IccCardApplicationStatus application = status.getApplication(appIndex);
+            IccCardApplication application = status.getApplication(appIndex);
             mAid = application.aid;
             mUSIM = application.app_type
                       == IccCardApplication.AppType.APPTYPE_USIM;
@@ -717,7 +693,7 @@ private final int RIL_INT_RADIO_ON = 10;*/
                         break;
                     }
                     IccCardStatus status = (IccCardStatus) asyncResult.result;
-                    if (status.mApplications == null || status.mApplications.length == 0) {
+                    if (status.getNumApplications() == 0) {
                         if (!mRil.getRadioState().isOn()) {
                             break;
                         }
@@ -726,16 +702,16 @@ private final int RIL_INT_RADIO_ON = 10;*/
                     } else {
                         int appIndex = -1;
                         if (mPhoneType == RILConstants.CDMA_PHONE) {
-                            appIndex = status.mCdmaSubscriptionAppIndex;
+                            appIndex = status.getCdmaSubscriptionAppIndex();
                             Log.d(LOG_TAG, "This is a CDMA PHONE " + appIndex);
                         } else {
-                            appIndex = status.mGsmUmtsSubscriptionAppIndex;
+                            appIndex = status.getGsmUmtsSubscriptionAppIndex();
                             Log.d(LOG_TAG, "This is a GSM PHONE " + appIndex);
                         }
 
-                        IccCardApplicationStatus application = status.mApplications[appIndex];
-                        IccCardApplicationStatus.AppState app_state = application.app_state;
-                        IccCardApplicationStatus.AppType app_type = application.app_type;
+                        IccCardApplication application = status.getApplication(appIndex);
+                        IccCardApplication.AppState app_state = application.app_state;
+                        IccCardApplication.AppType app_type = application.app_type;
 
                         switch (app_state) {
                             case APPSTATE_PIN:
@@ -805,12 +781,12 @@ private final int RIL_INT_RADIO_ON = 10;*/
 
         send(rr);
     }
-	/**
+ 	/**
      * Notify all registrants that the ril has connected or disconnected.
      *
      * @param rilVer is the version of the ril or -1 if disconnected.
      */
-    @Override
+/*  @Override
     public void notifyRegistrantsRilConnectionChanged(int rilVer) {
         mRilVersion = rilVer;
         if (mRilConnectedRegistrants != null) {
@@ -818,7 +794,7 @@ private final int RIL_INT_RADIO_ON = 10;*/
                                 new AsyncResult (null, new Integer(rilVer), null));
         }
     }
- /*   @Override
+   @Override
 	public void
     dial(String address, int clirMode, UUSInfo uusInfo, Message result) {
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_DIAL, result);
