@@ -46,16 +46,33 @@ public class HuaweiQualcommRIL extends RIL implements CommandsInterface {
     protected IccHandler mIccHandler;
     protected String mAid;
     protected boolean mUSIM = false;
+    //private String mLastDataIface;
     protected String[] mLastDataIface = new String[20];
     boolean RILJ_LOGV = true;
     boolean RILJ_LOGD = true;
-    boolean skipCdmaSubcription = needsOldRilFeature("skipCdmaSubcription");
 
     private final int RIL_INT_RADIO_OFF = 0;
     private final int RIL_INT_RADIO_UNAVALIABLE = 1;
     private final int RIL_INT_RADIO_ON = 2;
     private final int RIL_INT_RADIO_ON_NG = 10;
     private final int RIL_INT_RADIO_ON_HTC = 13;
+
+  /*private final int RIL_INT_RADIO_OFF = 0;
+    private final int RIL_INT_RADIO_UNAVAILABLE = 1;
+    private final int RIL_INT_RADIO_SIM_NOT_READY = 2;
+    private final int RIL_INT_RADIO_SIM_LOCKED_OR_ABSENT = 3;
+    private final int RIL_INT_RADIO_SIM_READY = 4;
+    private final int RIL_INT_RADIO_RUIM_NOT_READY = 5;
+    private final int RIL_INT_RADIO_RUIM_READY = 6;
+    private final int RIL_INT_RADIO_RUIM_LOCKED_OR_ABSENT = 7;
+    private final int RIL_INT_RADIO_NV_NOT_READY = 8;
+    private final int RIL_INT_RADIO_NV_READY = 9;
+    private final int RIL_INT_RADIO_ON = 10;*/
+
+    static final int RIL_REQUEST_SIM_TRANSMIT_BASIC = 10026;
+    static final int RIL_REQUEST_SIM_OPEN_CHANNEL = 10027;
+    static final int RIL_REQUEST_SIM_CLOSE_CHANNEL = 10028;
+    static final int RIL_REQUEST_SIM_TRANSMIT_CHANNEL = 10029;
 
 
     public HuaweiQualcommRIL(Context context, int networkMode, int cdmaSubscription) {
@@ -124,9 +141,9 @@ public class HuaweiQualcommRIL extends RIL implements CommandsInterface {
         RILRequest rr
                 = RILRequest.obtain(RIL_REQUEST_SIM_IO, result);
 
-        if (mUSIM)
+       /* if (mUSIM)
             path = path.replaceAll("7F20$","7FFF");
-
+*/
         rr.mp.writeInt(command);
         rr.mp.writeInt(fileid);
         rr.mp.writeString(path);
@@ -154,13 +171,24 @@ public class HuaweiQualcommRIL extends RIL implements CommandsInterface {
         IccCardApplication ca;
 
         IccCardStatus status = new IccCardStatus();
-        status.setCardState(p.readInt());
-        status.setUniversalPinState(p.readInt());
-        status.setGsmUmtsSubscriptionAppIndex(p.readInt());
-        status.setCdmaSubscriptionAppIndex(p.readInt());
-        status.setImsSubscriptionAppIndex(p.readInt());
+	int setCardState = p.readInt();
+        	status.setCardState(setCardState);
+		if (RILJ_LOGD) riljLog( "status.setCardState " + setCardState);
+	int setUniversalPinState = p.readInt();
+        	status.setUniversalPinState(setUniversalPinState);
+		if (RILJ_LOGD) riljLog( "status.setUniversalPinState " + setUniversalPinState);
+	int setGsmUmtsSubscriptionAppIndex = p.readInt();
+        	status.setGsmUmtsSubscriptionAppIndex(setGsmUmtsSubscriptionAppIndex);
+		if (RILJ_LOGD) riljLog( "status.setGsmUmtsSubscriptionAppIndex " + setGsmUmtsSubscriptionAppIndex);
+	int setCdmaSubscriptionAppIndex = p.readInt();
+        	status.setCdmaSubscriptionAppIndex(setCdmaSubscriptionAppIndex);
+		if (RILJ_LOGD) riljLog( "status.setCdmaSubscriptionAppIndex " + setCdmaSubscriptionAppIndex);
+	int setImsSubscriptionAppIndex = p.readInt();
+        	status.setImsSubscriptionAppIndex(setImsSubscriptionAppIndex);
+		if (RILJ_LOGD) riljLog( "status.setImsSubscriptionAppIndex " + setImsSubscriptionAppIndex);
 
         int numApplications = p.readInt();
+		if (RILJ_LOGD) riljLog( "numApplications " + numApplications);
         // limit to maximum allowed applications
         if (numApplications > IccCardStatus.CARD_MAX_APPS) {
             numApplications = IccCardStatus.CARD_MAX_APPS;
@@ -170,23 +198,31 @@ public class HuaweiQualcommRIL extends RIL implements CommandsInterface {
         for (int i = 0; i < numApplications; i++) {
             ca = new IccCardApplication();
             ca.app_type = ca.AppTypeFromRILInt(p.readInt());
-            ca.app_state = ca.AppStateFromRILInt(p.readInt());
-            ca.perso_substate = ca.PersoSubstateFromRILInt(p.readInt());
-            ca.aid = p.readString();
-            ca.app_label = p.readString();
-            ca.pin1_replaced = p.readInt();
-            ca.pin1 = ca.PinStateFromRILInt(p.readInt());
-            ca.pin2 = ca.PinStateFromRILInt(p.readInt());
-            if (!needsOldRilFeature("skippinpukcount")) {
-                p.readInt(); //remaining_count_pin1
-                p.readInt(); //remaining_count_puk1
-                p.readInt(); //remaining_count_pin2
-                p.readInt(); //remaining_count_puk2
+			if (RILJ_LOGD) riljLog( "ca.app_type " + ca.app_type);
+            int appstate = p.readInt();
+            ca.app_state = ca.AppStateFromRILInt(appstate);
+			if (RILJ_LOGD) riljLog( "ca.app_state " + ca.app_state);
+			if (appstate == -1) {
+                if (RILJ_LOGD) riljLog(
+                        "Illegal app, Mark it READY! RIL_APPSTATE_ILLEGAL "
+                        + appstate + " modified to " + ca.app_state);
             }
+            ca.perso_substate = ca.PersoSubstateFromRILInt(p.readInt());
+			if (RILJ_LOGD) riljLog( "ca.perso_substate " + ca.perso_substate);
+            ca.aid = p.readString();
+			if (RILJ_LOGD) riljLog( "ca.aid " + ca.aid);
+            ca.app_label = p.readString();
+			if (RILJ_LOGD) riljLog( "ca.app_label " + ca.app_label);
+            ca.pin1_replaced = p.readInt();
+			if (RILJ_LOGD) riljLog( "ca.pin1_replaced " + ca.pin1_replaced);
+            ca.pin1 = ca.PinStateFromRILInt(p.readInt());
+			if (RILJ_LOGD) riljLog( "ca.pin1 " + ca.pin1);
+            ca.pin2 = ca.PinStateFromRILInt(p.readInt());
+			if (RILJ_LOGD) riljLog( "ca.pin2 " + ca.pin2);
             status.addApplication(ca);
         }
         int appIndex = -1;
-        if (mPhoneType == RILConstants.CDMA_PHONE && !skipCdmaSubcription) {
+        if (mPhoneType == RILConstants.CDMA_PHONE) {
             appIndex = status.getCdmaSubscriptionAppIndex();
             Log.d(LOG_TAG, "This is a CDMA PHONE " + appIndex);
         } else {
@@ -329,6 +365,7 @@ public class HuaweiQualcommRIL extends RIL implements CommandsInterface {
     public void setCurrentPreferredNetworkType() {
         if (RILJ_LOGD) riljLog("setCurrentPreferredNetworkType: " + mSetPreferredNetworkType);
         setPreferredNetworkType(mSetPreferredNetworkType, null);
+	if (RILJ_LOGD) riljLog("setCurrentPreferredNetworkType IGNORED");
     }
 
     @Override
@@ -396,12 +433,6 @@ public class HuaweiQualcommRIL extends RIL implements CommandsInterface {
         Object ret = null;
 
         if (error == 0 || p.dataAvail() > 0) {
-
-            /* Convert RIL_REQUEST_GET_MODEM_VERSION back */
-            if (SystemProperties.get("ro.cm.device").indexOf("e73") == 0 &&
-                  rr.mRequest == 220) {
-                rr.mRequest = RIL_REQUEST_BASEBAND_VERSION;
-            }
 
             // either command succeeds or command fails but with data payload
             try {switch (rr.mRequest) {
@@ -513,12 +544,11 @@ public class HuaweiQualcommRIL extends RIL implements CommandsInterface {
             case RIL_REQUEST_EXIT_EMERGENCY_CALLBACK_MODE: ret = responseVoid(p); break;
             case RIL_REQUEST_REPORT_SMS_MEMORY_STATUS: ret = responseVoid(p); break;
             case RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING: ret = responseVoid(p); break;
-            case 104: ret = responseInts(p); break; // RIL_REQUEST_VOICE_RADIO_TECH
-            case 105: ret = responseInts(p); break; // RIL_REQUEST_CDMA_GET_SUBSCRIPTION_SOURCE
-            case 106: ret = responseStrings(p); break; // RIL_REQUEST_CDMA_PRL_VERSION
-            case 107: ret = responseInts(p);  break; // RIL_REQUEST_IMS_REGISTRATION_STATE
+            case RIL_REQUEST_CDMA_GET_SUBSCRIPTION_SOURCE: ret =  responseInts(p); break;
+            case RIL_REQUEST_ISIM_AUTHENTICATION: ret =  responseString(p); break;
+            case RIL_REQUEST_ACKNOWLEDGE_INCOMING_GSM_SMS_WITH_PDU: ret = responseVoid(p); break;
+            case RIL_REQUEST_STK_SEND_ENVELOPE_WITH_STATUS: ret = responseICC_IO(p); break;
             case RIL_REQUEST_VOICE_RADIO_TECH: ret = responseInts(p); break;
-
             default:
                 throw new RuntimeException("Unrecognized solicited response: " + rr.mRequest);
             //break;
@@ -562,23 +592,10 @@ public class HuaweiQualcommRIL extends RIL implements CommandsInterface {
         int dataPosition = p.dataPosition(); // save off position within the Parcel
         int response = p.readInt();
 
-        /* Assume devices needing the "datacall" GB-compatibility flag are
-         * running GB RILs, so skip 1031-1034 for those */
-        if (needsOldRilFeature("datacall")) {
-            switch(response) {
-                 case 1031:
-                 case 1032:
-                 case 1033:
-                 case 1034:
-                     ret = responseVoid(p);
-                     return;
-            }
-        }
-
         switch(response) {
-            //case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret =  responseVoid(p); break;
+            case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret =  responseVoid(p); break;
             case RIL_UNSOL_RIL_CONNECTED: ret = responseInts(p); break;
-            case RIL_UNSOL_VOICE_RADIO_TECH_CHANGED: ret = responseVoid(p); break;
+	    case RIL_UNSOL_VOICE_RADIO_TECH_CHANGED: ret = responseVoid(p); break;
             case 1036: ret = responseVoid(p); break; // RIL_UNSOL_RESPONSE_IMS_NETWORK_STATE_CHANGED
             case 1037: ret = responseVoid(p); break; // RIL_UNSOL_EXIT_EMERGENCY_CALLBACK_MODE
             case 1038: ret = responseVoid(p); break; // RIL_UNSOL_DATA_NETWORK_STATE_CHANGED
@@ -597,9 +614,12 @@ public class HuaweiQualcommRIL extends RIL implements CommandsInterface {
                 int state = p.readInt();
                 setRadioStateFromRILInt(state);
                 break;
-            case RIL_UNSOL_RIL_CONNECTED:
+            		case RIL_UNSOL_RIL_CONNECTED:
                 if (RILJ_LOGD) unsljLogRet(response, ret);
-
+				// Initial conditions
+                setRadioPower(false, null);
+                setPreferredNetworkType(mPreferredNetworkType, null);
+                setCdmaSubscriptionSource(mCdmaSubscription, null);
                 notifyRegistrantsRilConnectionChanged(((int[])ret)[0]);
                 break;
             case RIL_UNSOL_VOICE_RADIO_TECH_CHANGED:
@@ -615,19 +635,6 @@ public class HuaweiQualcommRIL extends RIL implements CommandsInterface {
                 break;
             case 1038:
                 break;
-        }
-    }
-
-    /**
-     * Notify all registrants that the ril has connected or disconnected.
-     *
-     * @param rilVer is the version of the ril or -1 if disconnected.
-     */
-    private void notifyRegistrantsRilConnectionChanged(int rilVer) {
-        mRilVersion = rilVer;
-        if (mRilConnectedRegistrants != null) {
-            mRilConnectedRegistrants.notifyRegistrants(
-                                new AsyncResult (null, new Integer(rilVer), null));
         }
     }
 
@@ -706,7 +713,7 @@ public class HuaweiQualcommRIL extends RIL implements CommandsInterface {
                         mRil.setRadioState(CommandsInterface.RadioState.RADIO_ON);
                     } else {
                         int appIndex = -1;
-                        if (mPhoneType == RILConstants.CDMA_PHONE && !skipCdmaSubcription) {
+                        if (mPhoneType == RILConstants.CDMA_PHONE) {
                             appIndex = status.getCdmaSubscriptionAppIndex();
                             Log.d(LOG_TAG, "This is a CDMA PHONE " + appIndex);
                         } else {
@@ -786,7 +793,41 @@ public class HuaweiQualcommRIL extends RIL implements CommandsInterface {
 
         send(rr);
     }
+	/**
+     * Notify all registrants that the ril has connected or disconnected.
+     *
+     * @param rilVer is the version of the ril or -1 if disconnected.
+     */
+    @Override
+    public void notifyRegistrantsRilConnectionChanged(int rilVer) {
+        mRilVersion = rilVer;
+        if (mRilConnectedRegistrants != null) {
+            mRilConnectedRegistrants.notifyRegistrants(
+                                new AsyncResult (null, new Integer(rilVer), null));
+        }
+    }
+ /*   @Override
+	public void
+    dial(String address, int clirMode, UUSInfo uusInfo, Message result) {
+        RILRequest rr = RILRequest.obtain(RIL_REQUEST_DIAL, result);
 
+        rr.mp.writeString(address);
+        rr.mp.writeInt(clirMode);
+        rr.mp.writeInt(0); // UUS information is absent
+
+        if (uusInfo == null) {
+            rr.mp.writeInt(0); // UUS information is absent
+        } else {
+            rr.mp.writeInt(1); // UUS information is present
+            rr.mp.writeInt(uusInfo.getType());
+            rr.mp.writeInt(uusInfo.getDcs());
+            rr.mp.writeByteArray(uusInfo.getUserData());
+        }
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+        send(rr);
+    }  */ 
     @Override
     public void
     setNetworkSelectionModeManual(String operatorNumeric, Message response) {
