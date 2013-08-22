@@ -1,5 +1,3 @@
 BUGS:
 
-1- Video recording[Works but FC when close camera]
-2- Video playing[Updated media profiles[Not working]]
-5- Ril[Partially working(Intermitent signal)]
+1- OMX

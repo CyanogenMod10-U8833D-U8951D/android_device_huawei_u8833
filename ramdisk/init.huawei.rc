@@ -492,18 +492,14 @@ service akm8975 /system/bin/akmd8975
     class main
     disabled
     oneshot
-
-service hostapd /system/bin/hostapd -dddd /data/hostapd/hostapd.conf
-    class late_start
-    user root
-    group root
-    oneshot
-    disabled
     
 service akm8962 /system/bin/akmd8962
     class main
     disabled
     oneshot
+
+service rmt_storage /system/bin/rmt_storage
+    class core
 
 service rmt_oeminfo /system/bin/rmt_oeminfo
     class main
@@ -511,8 +507,8 @@ service rmt_oeminfo /system/bin/rmt_oeminfo
     oneshot
 
 on property:ro.emmc=1
-    start rmt_oeminfo
     start rmt_storage
+    start rmt_oeminfo
 
 service qcom-sh /system/bin/sh /init.qcom.sh
     class main

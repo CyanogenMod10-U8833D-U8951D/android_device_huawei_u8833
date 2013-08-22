@@ -67,14 +67,11 @@ persist.rild.nitz_short_ons_2=
 persist.rild.nitz_short_ons_3=
 ro.config.ehrpd=true
 ril.subscription.types=NV,RUIM
-ro.telephony.ril_class=HuaweiQualcommRIL
 ro.telephony.ril.v3=qcomdsds
 ro.use_data_netmgrd=true
 ro.multi.rild=false
 keyguard.no_require_sim=true
 ro.com.android.dataroaming=false
-ro.ril.disable.power.collapse=0
-DEVICE_PROVISIONED=1
 
 # USB
 persist.sys.usb.config=mtp,adb
