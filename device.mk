@@ -6,19 +6,14 @@ $(call inherit-product-if-exists, vendor/huawei/u8833/u8833-vendor.mk)
 
 DEVICE_PACKAGE_OVERLAYS += device/huawei/u8833/overlay
 
-FRAMEWORKS_BASE_SUBDIRS += ../../$(LOCAL_PATH)/ril/
-
 PRODUCT_AAPT_CONFIG := normal hdpi
 PRODUCT_AAPT_PREF_CONFIG := hdpi
 
 # Video
 PRODUCT_PACKAGES += \
-    libOmxVdec \
-    libOmxVenc \
-    libOmxAacEnc \
-    libOmxAmrEnc \
-    libI420colorconvert \
-    libstagefrighthw
+    libstagefrighthw \
+    libmm-omxcore \
+    libOmxCore
 
 # Graphics
 PRODUCT_PACKAGES += \
