@@ -1,5 +1,9 @@
 import init.huawei.usb.rc
 
+on early-init
+    start ueventd
+    import /init.b2g.rc
+
 on early-boot
     start comp-set
     start rendering-set
@@ -207,6 +211,10 @@ on property:ro.use_data_netmgrd=false
 on emmc-fs
     # mount mmc partitions
     mount_all /fstab.huawei
+
+    chmod 0755 /system/b2g/b2g
+    chmod 0755 /system/b2g/updater
+    chmod 0755 /system/b2g/plugin-container
 
     start rmt_storage
 

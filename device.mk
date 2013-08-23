@@ -130,7 +130,7 @@ PRODUCT_COPY_FILES += \
 
 $(call inherit-product, build/target/product/full.mk)
 
-PRODUCT_NAME := cm_u8833
+PRODUCT_NAME := full_u8833
 PRODUCT_DEVICE := u8833
 PRODUCT_BRAND := huawei
 
