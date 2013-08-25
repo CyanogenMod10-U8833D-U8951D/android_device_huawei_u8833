@@ -210,8 +210,6 @@ on emmc-fs
 
     start rmt_storage
 
-write /sys/module/block2mtd/parameters/block2mtd /dev/block/mmcblk0p14
-
 on property:sys.radio.shutdown=true
    exec /system/bin/sh /system/etc/init.qcom.efs.sync.sh
 
@@ -493,7 +491,7 @@ service akm8962 /system/bin/akmd8962
     disabled
     oneshot
 
-service rmt_storage /system/bin/rmt_storage
+service rmt_storage /system/bin/rmt_storage /dev/block/mmcblk0p9 /dev/block/mmcblk0p10 /dev/block/mmcblk0p14
     class core
 
 service rmt_oeminfo /system/bin/rmt_oeminfo

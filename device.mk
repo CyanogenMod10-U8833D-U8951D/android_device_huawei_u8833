@@ -9,6 +9,8 @@ DEVICE_PACKAGE_OVERLAYS += device/huawei/u8833/overlay
 PRODUCT_AAPT_CONFIG := normal hdpi
 PRODUCT_AAPT_PREF_CONFIG := hdpi
 
+FRAMEWORKS_BASE_SUBDIRS += ../../$(LOCAL_PATH)/ril/
+
 # Video
 PRODUCT_PACKAGES += \
     libstagefrighthw \
@@ -20,7 +22,6 @@ PRODUCT_PACKAGES += \
     copybit.msm7x27a \
     gralloc.msm7x27a \
     hwcomposer.msm7x27a \
-    libgenlock \
     libtilerenderer
 
 # Audio
