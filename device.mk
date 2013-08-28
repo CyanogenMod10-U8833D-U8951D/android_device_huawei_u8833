@@ -11,22 +11,26 @@ PRODUCT_AAPT_PREF_CONFIG := hdpi
 
 FRAMEWORKS_BASE_SUBDIRS += ../../$(LOCAL_PATH)/ril/
 
-# Video
 PRODUCT_PACKAGES += \
-    libstagefrighthw \
-    libmm-omxcore \
-    libOmxVdec \
+    libOmxCore \
     libOmxVenc \
-    libOmxCore
-
+    libOmxVdec \
+    libmm-omxcore \
+    libdivxdrmdecrypt \
+    libstagefrighthw
+    
 # Graphics
 PRODUCT_PACKAGES += \
-    copybit.msm7x27a \
     gralloc.msm7x27a \
+    copybit.msm7x27a \
     hwcomposer.msm7x27a \
-    libmemalloc \
+    libtilerenderer \
+    liboverlay \
     libgenlock \
-    libtilerenderer
+    libmemalloc \
+    libhwcexternal \
+    libhwcservice \
+    libqdutils
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -99,27 +103,16 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/huawei/u8833/prebuilt/system/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
     device/huawei/u8833/prebuilt/system/etc/audio_policy.conf:system/etc/audio_policy.conf \
-    device/huawei/u8833/prebuilt/system/etc/bluetooth/BCM4330.hcd:system/etc/bluetooth/BCM4330.hcd
 
 PRODUCT_COPY_FILES += \
     device/huawei/u8833/prebuilt/system/etc/dhcpcd/dhcpcd.conf:system/etc/dhcpcd/dhcpcd.conf \
     device/huawei/u8833/prebuilt/system/etc/AudioFilter.csv:system/etc/AudioFilter.csv \
-    device/huawei/u8833/prebuilt/system/etc/init.qcom.composition_type.sh:system/etc/init.qcom.composition_type.sh \
-    device/huawei/u8833/prebuilt/system/etc/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh \
-    device/huawei/u8833/prebuilt/system/etc/init.qcom.sdio.sh:system/etc/init.qcom.sdio.sh \
     device/huawei/u8833/prebuilt/system/etc/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
-    device/huawei/u8833/prebuilt/system/etc/init.qcom.coex.sh:system/etc/init.qcom.coex.sh \
-    device/huawei/u8833/prebuilt/system/etc/init.qcom.fm.sh:system/etc/init.qcom.fm.sh \
     device/huawei/u8833/prebuilt/system/etc/vold.fstab:system/etc/vold.fstab \
     device/huawei/u8833/prebuilt/system/etc/media_profiles.xml:system/etc/media_profiles.xml \
     device/huawei/u8833/prebuilt/system/etc/media_codecs.xml:system/etc/media_codecs.xml \
     device/huawei/u8833/prebuilt/system/etc/init.qcom.efs.sync.sh:system/etc/init.qcom.efs.sync.sh \
-    device/huawei/u8833/prebuilt/system/etc/init.qcom.post_fs.sh:system/etc/init.qcom.post_fs.sh \
-    device/huawei/u8833/prebuilt/system/etc/init.target.8x25.sh:system/etc/init.target.8x25.sh \
-    device/huawei/u8833/prebuilt/system/etc/init.qcom.thermald_conf.sh:system/etc/init.qcom.thermald_conf.sh \
-    device/huawei/u8833/prebuilt/system/etc/thermald-8x25-msm1-pmic_therm.conf:system/etc/thermald-8x25-msm1-pmic_therm.conf \
     device/huawei/u8833/prebuilt/system/etc/thermald.conf:system/etc/thermald.conf \
-    device/huawei/u8833/prebuilt/system/etc/init.ath3k.bt.sh:system/etc/init.ath3k.bt.sh \
     device/huawei/u8833/prebuilt/system/etc/qosmgr_rules.xml:system/etc/qosmgr_rules.xml
 
 PRODUCT_COPY_FILES += \

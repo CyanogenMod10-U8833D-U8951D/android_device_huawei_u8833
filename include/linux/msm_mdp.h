@@ -520,7 +520,6 @@ struct msmfb_metadata {
 		struct mdp_blend_cfg blend_cfg;
 	} data;
 };
-
 struct mdp_page_protection {
 	uint32_t page_protection;
 };
@@ -540,7 +539,6 @@ struct msmfb_cabc_config {
     uint32_t mov_det_on;
 };
 #endif
-
 struct mdp_mixer_info {
 	int pndx;
 	int pnum;

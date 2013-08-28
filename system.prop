@@ -32,15 +32,6 @@ ro.confg.hw_appfsversion=u8833VCM10_1_SYSIMG
 ro.confg.hw_appsbootversion=u8833VCM10_1_APPSBOOT
 ro.confg.hw_appversion=u8833VCM10_1_KERNEL
 
-# Media
-media.stagefright.enable-player=true
-media.stagefright.enable-meta=false
-media.stagefright.enable-scan=true
-media.stagefright.enable-http=true
-media.stagefright.enable-fma2dp=true
-media.stagefright.enable-aac=true
-media.stagefright.enable-qcp=true
-
 # Memory
 ro.zram.default=0
 persist.sys.purgeable_assets=1

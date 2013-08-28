@@ -208,8 +208,6 @@ on emmc-fs
     # mount mmc partitions
     mount_all /fstab.huawei
 
-    start rmt_storage
-
 on property:sys.radio.shutdown=true
    exec /system/bin/sh /system/etc/init.qcom.efs.sync.sh
 
@@ -218,7 +216,6 @@ on post-fs
     chown root log /data/dontpanic/modem_panic
     chmod 0640 /data/dontpanic/modem_panic
     export_rc /persist/init.cne.rc
-    exec /system/bin/sh /system/etc/init.qcom.thermald_conf.sh
 
 service ril-qmi /system/bin/sh /init.qcom.ril.path.sh
     class main
@@ -339,8 +336,6 @@ on post-fs-data
 
     setprop vold.post_fs_data_done 1
 
-	start qmuxd
-    start netmgrd
     start ril-qmi
     start wlan_detect
 
@@ -353,14 +348,6 @@ on property:bluetooth.isEnabled=true
 
 on property:bluetooth.isEnabled=false
     start amp_unload
-
-service qcom-c_main-sh /system/bin/sh /init.qcom.class_main.sh
-    class main
-    user root
-    oneshot
-
-on property:vold.decrypt=trigger_restart_framework
-    start qcom-c_main-sh
 
 service hwdevctl /system/bin/hwdevctlservice
     class main
@@ -436,8 +423,7 @@ service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
     oneshot
 
 service oem_rpc_svc /system/bin/oem_rpc_svc
-    class main
-    oneshot
+    class core
 
 on property:crypto.driver.load=1
      insmod /system/lib/modules/qce.ko
@@ -459,26 +445,12 @@ on property:drmdiag.load=1
 on property:drmdiag.load=0
     stop drmdiag
 
-service qcom-sh /system/bin/sh /init.qcom.sh
-    class late_start
-    user root
-    oneshot
 service gps_nmea /system/bin/port-bridge /dev/nmea /dev/ttyGS1
     disabled
 
 service compassd /system/bin/compassd
     class main
     disabled
-    oneshot
-
-service qcom-post-boot /system/bin/sh /system/etc/init.qcom.post_boot.sh
-    class late_start
-    user root
-    disabled
-    oneshot
-
-service qcom-wifi /system/bin/sh /system/etc/init.qcom.wifi.sh
-    class late_start
     oneshot
     
 service akm8975 /system/bin/akmd8975
@@ -502,11 +474,6 @@ service rmt_oeminfo /system/bin/rmt_oeminfo
 on property:ro.emmc=1
     start rmt_storage
     start rmt_oeminfo
-
-service qcom-sh /system/bin/sh /init.qcom.sh
-    class main
-    user root
-    oneshot
 
 service hostapd /system/bin/hostapd -dddd /data/hostapd/hostapd.conf
     class main
@@ -550,11 +517,6 @@ service akm8963 /system/bin/akmd8963
     class main
     disabled
     oneshot
-    
-service akm8962 /system/bin/akmd8962
-    class main
-    disabled
-    oneshot
 
 on property:net.service.pppd.enable=1
     exec /system/bin/rmmod pppoe.ko    
@@ -578,37 +540,12 @@ service pppd-gprs /system/bin/pppd call gprs
     group radio cache inet misc audio sdcard_rw qcom_oncrpc diag
     oneshot
     disabled
-    
-service comp-set /system/bin/sh /system/etc/init.qcom.composition_type.sh
-    class late_start
-    user root
-    critical
-    disabled
-    oneshot
-
-service rendering-set /system/bin/sh /system/etc/init.qcom.rendering.sh
-    class late_start
-    user root
-    critical
-    disabled
-    oneshot
 
 #start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
         class late_start
         user media
         group system camera inet audio
-
-service thermald /system/bin/thermald
-   class late_start
-   user root
-   group root
-   disabled
-
-service mpdecision /system/bin/mpdecision --no_sleep --avg_comp
-    class late_start
-	user root
-	disabled
 
 on property:sys.radio.shutdown=true
    exec /system/bin/sh /system/etc/init.qcom.efs.sync.sh
