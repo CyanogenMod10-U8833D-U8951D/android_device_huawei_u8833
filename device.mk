@@ -13,10 +13,7 @@ FRAMEWORKS_BASE_SUBDIRS += ../../$(LOCAL_PATH)/ril/
 
 PRODUCT_PACKAGES += \
     libOmxCore \
-    libOmxVenc \
-    libOmxVdec \
     libmm-omxcore \
-    libdivxdrmdecrypt \
     libstagefrighthw
     
 # Graphics
@@ -24,13 +21,8 @@ PRODUCT_PACKAGES += \
     gralloc.msm7x27a \
     copybit.msm7x27a \
     hwcomposer.msm7x27a \
-    libtilerenderer \
-    liboverlay \
     libgenlock \
-    libmemalloc \
-    libhwcexternal \
-    libhwcservice \
-    libqdutils
+    libtilerenderer
 
 # Audio
 PRODUCT_PACKAGES += \
