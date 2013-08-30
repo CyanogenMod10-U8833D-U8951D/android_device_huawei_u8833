@@ -110,7 +110,8 @@ PRODUCT_COPY_FILES += \
     device/huawei/u8833/prebuilt/system/etc/qosmgr_rules.xml:system/etc/qosmgr_rules.xml
 
 PRODUCT_COPY_FILES += \
-    device/huawei/u8833/prebuilt/system/usr/idc/synaptics.idc:system/usr/idc/synaptics.idc \
+    device/huawei/u8833/prebuilt/system/usr/idc/qwerty.idc:system/usr/idc/qwerty.idc \
+    device/huawei/u8833/prebuilt/system/usr/idc/qwerty2.idc:system/usr/idc/qwerty2.idc \
     device/huawei/u8833/prebuilt/system/usr/keychars/7x27a_kp.kcm:system/usr/keychars/7x27a_kp.kcm \
     device/huawei/u8833/prebuilt/system/usr/keylayout/7x27a_kp.kl:system/usr/keylayout/7x27a_kp.kl \
     device/huawei/u8833/prebuilt/system/usr/keylayout/7k_handset.kl:system/usr/keylayout/7k_handset.kl \
