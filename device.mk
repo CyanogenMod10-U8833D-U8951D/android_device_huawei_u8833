@@ -11,15 +11,17 @@ PRODUCT_AAPT_PREF_CONFIG := hdpi
 
 FRAMEWORKS_BASE_SUBDIRS += ../../$(LOCAL_PATH)/ril/
 
+# Video
 PRODUCT_PACKAGES += \
-    libOmxCore \
+    libstagefrighthw \
     libmm-omxcore \
-    libstagefrighthw
-    
+    libOmxCore \
+    libOmxVdec \
+
 # Graphics
 PRODUCT_PACKAGES += \
-    gralloc.msm7x27a \
     copybit.msm7x27a \
+    gralloc.msm7x27a \
     hwcomposer.msm7x27a \
     libgenlock \
     libtilerenderer
@@ -119,8 +121,4 @@ PRODUCT_COPY_FILES += \
     device/huawei/u8833/prebuilt/system/usr/keylayout/surf_keypad.kl:system/usr/keylayout/surf_keypad.kl
 
 $(call inherit-product, build/target/product/full.mk)
-
-PRODUCT_NAME := cm_u8833
-PRODUCT_DEVICE := u8833
-PRODUCT_BRAND := huawei
 

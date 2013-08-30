@@ -27,8 +27,8 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, device/huawei/u8833/device.mk)
 
 # Set those variables here to overwrite the inherited values.
-PRODUCT_NAME := huawei_u8833
+PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
+PRODUCT_NAME := full_u8833
 PRODUCT_DEVICE := u8833
-PRODUCT_BRAND := Huawei
-PRODUCT_MANUFACTURER := Huawei
-PRODUCT_MODEL := HUAWEI U8833
+PRODUCT_MANUFACTURER := HUAWEI
+PRODUCT_MODEL := Ascend Y300
